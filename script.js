@@ -16,9 +16,9 @@ const Schemaz = new mongoose.Schema({
     description: String
 });
 
-const Modelz = mongoose.model("Csdatabases", Schemaz);
+const Modelz = mongoose.model("Csdatabase", Schemaz);
 
-app.post("/Csdatabases", async (req, res) => {
+app.post("/Csdatabase", async (req, res) => {
     try {
         let newDocument = new Modelz(req.body);
         await newDocument.save();
@@ -31,7 +31,7 @@ app.post("/Csdatabases", async (req, res) => {
     }
 });
 
-app.get("/Csdatabases/:id", async (req, res) => {
+app.get("/Csdatabase/:id", async (req, res) => {
     try {
         let id = req.params.id;
         let document = await Modelz.findById(id);
@@ -42,7 +42,7 @@ app.get("/Csdatabases/:id", async (req, res) => {
     }
 });
 
-app.delete("/Csdatabases/:id", async (req, res) => {
+app.delete("/Csdatabase/:id", async (req, res) => {
     try {
         let id = req.params.id;
         await Modelz.findByIdAndDelete(id);
@@ -54,7 +54,7 @@ app.delete("/Csdatabases/:id", async (req, res) => {
     }
 });
 
-app.get("/Csdatabases", async (req, res) => {
+app.get("/Csdatabase", async (req, res) => {
     try {
         let documents = await Modelz.find();
         res.send(documents);
