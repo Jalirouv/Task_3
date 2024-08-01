@@ -12,7 +12,7 @@
         <div class="wrapper">
             <div class="nav-left">
                 <ul class="nav-list">
-                    <li><h2><a href="#">Start Bootstrap</a></li>
+                    <li><h2><a href="#">Start Bootsrap</a></h2></li>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Shop</a></li>
@@ -31,15 +31,22 @@
     <main>
         <section id="hero"></section>
         <section id="products">
-            <div class="products-container">
-                <!-- Cards will be dynamically inserted here by JavaScript -->
+            <div class="form-wrapper">
+                <h2>Add Product</h2>
+                <form class="add-form">
+                    <input type="text" class="nameInp" placeholder="name">
+                    <input type="text" class="descInp" placeholder="description">
+                     <button type="submit">Add Category</button>
+                </form>
             </div>
+            <div class="products-container"></div>
         </section>
     </main>
 
     <footer>
         <div>Copyright © Your Website 2023</div>
     </footer>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="web.js"></script>

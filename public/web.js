@@ -1,55 +1,58 @@
-let BaseUrl = "http://localhost:7070/csdatabase.csdatabase/";
-let cardsDiv = document.querySelector(".products-container");
+let BaseUrl="http://localhost:5500/Task_3"
+let cardsDiv = document.querySelector(".products-container")
+let addForm=document.querySelector(".add-form")
+let nameInp=document.querySelector(".nameInp")
+let descInp=document.querySelector(".descInp")
 
 async function GetDatas() {
+    let datas = await axios.get(BaseUrl)
     try {
-        let response = await axios.get(BaseUrl);
-        console.log(response.data);
-        CreateCards(response.data);
-        AddDeleteEventListeners();
+        CreateCards(datas.data)
     } catch (error) {
         console.log(error);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    GetDatas();
-});
 
 function CreateCards(cards) {
-    cardsDiv.innerHTML = ''; // Clear existing cards
+    cardsDiv.innerHTML=""
     cards.forEach(element => {
-        cardsDiv.innerHTML +=
+        cardsDiv.innerHTML+=
         `
-        <div class="card product-card">
-            <button class="delete-btn">X</button>
-            <div class="card-top">
-                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="" class="image">
-            </div>
-            <div class="card-bottom product-details">
-                <h3>${element.name}</h3>
-                <span>${element.description}</span>
-                <button>View</button>
-            </div>
-        </div>
-        `;
+        <div class="cardd">
+          <div class="card-top">
+             <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="" class="image">
+           </div>
+           <div class="card-bottom">
+            <h3>${element.name}</h3>
+            <div>${element.description}</div>
+          <button class="del-btn" btn-id=${element._id}>Delete</button>
+      </div>
+  </div>
+     `
+     let delBtns = document.querySelectorAll(".del-btn")
+     delBtns.forEach(btn => {
+        btn.addEventListener("click", async function(){
+            let id = btn.getAttribute("btn-id")
+           await axios.delete(`${BaseUrl}/${id}`)
+           GetDatas()
+        })
     });
+
+    }); 
 }
 
-function AddDeleteEventListeners() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+addForm.addEventListener("submit",async function(event){
+    event.preventDefault()
+    let newPro = {
+        name: nameInp.value,
+        description: descInp.value
+    } 
+    await axios.post(`${BaseUrl}`, newPro)
+     nameInp.value=""
+    descInp.value=""
+    GetDatas()
+})
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
-            let card = button.closest('.product-card');
-            let id = card.dataset.id;
 
-            try {
-                await axios.delete(`${BaseUrl}${id}`);
-                card.remove();
-            } catch (error) {
-                console.log(error);
-            }
-        });
-    });
-}
+GetDatas()

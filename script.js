@@ -1,78 +1,76 @@
-const express = require("express")
-const mongoose = require("mongoose")
-const bodyParse = require("body-parser")
-const cors = require("cors")
-const app = express()
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const cors = require("cors");
 
+dotenv.config();
 
-
+const app = express();
 app.use(express.static('public'));
-app.use(bodyParse.json())
-app.use(cors())
+app.use(bodyParser.json());
+app.use(cors());
 
 const Schemaz = new mongoose.Schema({
     name: String,
     description: String
-})
+});
 
-const Modelz = mongoose.model("csdatabase", Schemaz)
+const Modelz = mongoose.model("Csdatabase", Schemaz);
 
-app.get("/csdatabase", async (req,res)=>{
+app.post("/documents", async (req, res) => {
     try {
-         req = await Modelz.find()
-         res.send(req)
-    } catch (error) {
-        res.status(500).send(error.message);
-    } 
-})
-
-app.post("/csdatabase", async (req,res)=>{
-    try {
-        let newRoom = new Modelz(req.body)
-        newRoom.save()
-        let updatedRoomz = await Modelz.find()
-        res.send(updatedRoomz)
-        console.log(newRoom);
-        console.log(updatedRoomz);
+        let newDocument = new Modelz(req.body);
+        await newDocument.save();
+        let updatedDocuments = await Modelz.find();
+        res.send(updatedDocuments);
+        console.log(newDocument);
+        console.log(updatedDocuments);
     } catch (error) {
         res.status(500).send(error.message);
     }
-   
-})
+});
 
-app.get("/csdatabase/:id", async (req,res)=>{
+app.get("/documents/:id", async (req, res) => {
     try {
-        let id = req.params.id
-        let room = await Modelz.findById(id)
-        res.send(room)
-        console.log(room);
+        let id = req.params.id;
+        let document = await Modelz.findById(id);
+        res.send(document);
+        console.log(document);
     } catch (error) {
         res.status(500).send(error.message);
     }
-    
-})
+});
 
-app.delete("/csdatabase/:id", async (req,res)=>{
-    try{
-    let id = req.params.id
-    let room = await Modelz.findByIdAndDelete(id)
-    let updatedRooms = await Modelz.find();
-    res.send(updatedRooms)
-    console.log(updatedRooms);
-    }catch (error){
+app.delete("/documents/:id", async (req, res) => {
+    try {
+        let id = req.params.id;
+        await Modelz.findByIdAndDelete(id);
+        let updatedDocuments = await Modelz.find();
+        res.send(updatedDocuments);
+        console.log(updatedDocuments);
+    } catch (error) {
         res.status(500).send(error.message);
     }
-})
+});
 
-mongoose.connect("mongodb+srv://jalilvrauf:OQV6jqvM20c1onpE@cluster0.ouwwhky.mongodb.net/")
-.then(res=>{
-    console.log("Connected to DB");
-})
-.catch(err =>{
-    console.log(err);
-})
+app.get("/documents", async (req, res) => {
+    try {
+        let documents = await Modelz.find();
+        res.send(documents);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 
+mongoose.connect(process.env.DB_connection_string, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log("Connected to DB");
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
-app.listen(7070, ()=>{
-    console.log("Port 7070 is listened");
-})
+app.listen(5500, () => {
+    console.log("Server is running on port 5500");
+});
